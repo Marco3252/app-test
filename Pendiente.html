@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diario Pedagogico</title>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+
+    body {
+        height: 100vh;
+        overflow-x: hidden;
+        background: #f0fdf4;
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+        height: 56px;
+        background: #166534;
+        color: white;
+        display: flex;
+        align-items: center;
+        padding: 0 15px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 900;
+    }
+
+    .header h1 {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        font-size: 18px;
+        font-weight: normal;
+    }
+
+    .menu-btn {
+        font-size: 24px;
+        cursor: pointer;
+        background: none;
+        border: none;
+        color: white;
+    }
+
+    /* ===== OVERLAY ===== */
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.4);
+        display: none;
+        z-index: 950;
+    }
+
+    .overlay.show {
+        display: block;
+    }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 240px;
+        height: 100%;
+        background: #14532d;
+        color: #fff;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        padding-top: 10px;
+        z-index: 1000;
+    }
+
+    .sidebar.show {
+        transform: translateX(0);
+    }
+
+    .sidebar .menu-btn {
+        display: block;
+        margin-left: auto;
+        margin-right: 15px;
+        margin-bottom: 10px;
+    }
+
+    .sidebar h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 18px;
+    }
+
+    .menu {
+        list-style: none;
+    }
+
+    .menu li {
+        padding: 15px 20px;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .menu li:hover {
+        background: #22c55e;
+        color: #14532d;
+        font-weight: bold;
+    }
+
+    /* ===== CONTENT ===== */
+    .content {
+        padding: 80px 20px 20px;
+        min-height: 100vh;
+    }
+</style>
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    <h1 id="titulo">Escanear Qr</h1>
+</div>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay" onclick="closeMenu()"></div>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+    <button class="menu-btn" onclick="closeMenu()">☰</button>
+
+    <h2>Menú</h2>
+    <ul class="menu">
+        <li onclick="window.location.href='Scan.php'">📋 Marcar asistencia</li>
+        <li onclick="window.location.href='Salida.php'">📤 Solicitar salida</li>
+        <li onclick="window.location.href='pendiente.php'">📦 Salidas pendientes</li>
+        <li>📁 Ver expediente</li>
+        <li onclick="window.location.href='CalificarClase.php'">📝 Calificar clase</li>
+    </ul>
+</div>
+
+<script>
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("overlay");
+
+    function toggleMenu() {
+        sidebar.classList.toggle("show");
+        overlay.classList.toggle("show");
+    }
+
+    function closeMenu() {
+        sidebar.classList.remove("show");
+        overlay.classList.remove("show");
+    }
+
+    /* ===== GESTO DESLIZAR ===== */
+    let startX = 0;
+
+    sidebar.addEventListener("touchstart", e => {
+        startX = e.touches[0].clientX;
+    });
+
+    sidebar.addEventListener("touchend", e => {
+        const endX = e.changedTouches[0].clientX;
+        if (startX - endX > 50) {
+            closeMenu();
+        }
+    });
+</script>
+
+<script> 
+    // Definir la variable en JS 
+    const nuevoTexto = "Solicitar salida"; 
+    
+    // Cambiar el contenido del h1 usando la variable 
+    document.getElementById("titulo").textContent = nuevoTexto; 
+</script>
+
+
+<style>
+    .glyphicon-lg
+{
+    font-size:4em
+}
+.info-block
+{
+    border-right:5px solid #E6E6E6;margin-bottom:25px
+}
+.info-block .square-box
+{
+    width:70px;min-height:70px;margin-right:22px;text-align:center!important;background-color:#676767;padding:20px 0
+}
+.info-block.block-info
+{
+    border-color:#20819e
+}
+.info-block.block-info .square-box
+{
+    background-color:#20819e;color:#FFF
+}
+</style>
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<div class="container">
+	<div class="row">
+		<h2>Filtered List</h2>
+        <div class="col-lg-12">
+            <input type="search" class="form-control" id="input-search" placeholder="Search Attendees..." >
+        </div>
+        <br>
+        <div class="searchable-container">
+            <div class="items col-xs-12 col-sm-6 col-md-6 col-lg-6 clearfix">
+               <div class="info-block block-info clearfix">
+                    <div class="square-box pull-left">
+                        <span class="glyphicon glyphicon-user glyphicon-lg"></span>
+                    </div>
+                    <h5>Company Name</h5>
+                    <h4>Name: Tyreese Burn</h4>
+                    <p>Title: Manager</p>
+                </div>
+            </div>
+            <div class="items col-xs-12 col-sm-12 col-md-6 col-lg-6 clearfix">
+               <div class="info-block block-info clearfix">
+                    <div class="square-box pull-left">
+                        <span class="glyphicon glyphicon-user glyphicon-lg"></span>
+                    </div>
+                    <h5>Company Name</h5>
+                    <h4>Name: Brenda Tree</h4>
+                    <p>Title: Manager</p>
+                </div>
+            </div>
+            <div class="items col-xs-12 col-sm-12 col-md-6 col-lg-6">
+               <div class="info-block block-info clearfix">
+                    <div class="square-box pull-left">
+                        <span class="glyphicon glyphicon-user glyphicon-lg"></span>
+                    </div>
+                    <h5>Company Name</h5>
+                    <h4>Name: Glenn Pho shizzle</h4>
+                    <p>Title: Manager</p>
+                </div>
+            </div>
+            <div class="items col-xs-12 col-sm-12 col-md-6 col-lg-6">
+               <div class="info-block block-info clearfix">
+                    <div class="square-box pull-left">
+                        <span class="glyphicon glyphicon-user glyphicon-lg"></span>
+                    </div>
+                    <h5>Company Name</h5>
+                    <h4>Name: Brian Hoyies</h4>
+                    <p>Title: Manager</p>
+                </div>
+            </div>
+        </div>
+	</div>
+
+</div>
